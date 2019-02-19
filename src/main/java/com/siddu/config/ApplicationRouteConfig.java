@@ -32,11 +32,12 @@ public class ApplicationRouteConfig extends RouteBuilder {
 				.split(body().tokenize("\n")).streaming().process(simpleFileProcessor)
 				.to("file:D:/Workspace-own/output");
 
-		// To read csv file and save in db
+		// To read csv file and save in db using jdbc template in processor
 		from("file:D:/Workspace-own/input/csv-file1?noop=true;move=.camel&consumer.delay=1s&idempotent=true")
 				.split(body().tokenize("\n")).streaming().unmarshal().csv().beanRef("studentFieldSetMapper", "process")
 				.process(csvFileProcessor);
 
+		// To read csv file and save in db using sql component
 		from("file:D:/Workspace-own/input/csv-file?noop=true;move=.camel&consumer.delay=1s&idempotent=true")
 				.split(body().tokenize("\n")).streaming().unmarshal().csv()
 				.beanRef("studentFieldSetMapper", "dataMapper")
